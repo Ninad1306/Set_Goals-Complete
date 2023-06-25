@@ -1,0 +1,58 @@
+.goal-item {
+  margin: 1rem 0;
+  background: #8686f2;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  color: white;
+  border-radius: 20px;
+  padding: 1rem 2rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-self: center;
+}
+
+.btnCont{
+  display: flex;
+}
+
+.buttonStyle{
+  height: 40px;
+  width: 120px;
+  font-size: 1.2rem;
+  color: #8686f2;
+  border-radius: 20px;
+  border: none;
+  margin-left: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.buttonStyle:hover{
+  color: white;
+  background-color: #b6b6f6;
+}
+
+.inputItem1{
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  width: 75%;
+}
+
+.inputItem2{
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  width: 75%;
+  text-decoration: line-through;
+}
+
+.inputItem:hover{
+  outline: none;
+}
+
+.inputItem:focus{
+  outline: none;
+}
