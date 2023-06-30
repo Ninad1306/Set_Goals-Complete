@@ -6,6 +6,7 @@ const GoalItem = props => {
   const [inputValue, setInputValue] = useState(props.text);
   const [isEditable, setIsEditable] = useState(!props.completed);
 
+  // Updates the enterd goal in the database
   const updateData = async (desc = inputValue, id, status = false) => {
     await Axios.patch("http://localhost:5000/goals/" + id, {
       desc,
@@ -13,19 +14,23 @@ const GoalItem = props => {
     })
   }
 
+  // Deletes a goal in the database
   const deleteHandler = () => {
     props.onDelete(props.id);
   }
 
+  // Sets the input value when the goal is updated
   const inputHandler = (e) => {
     setInputValue(e.target.value);
   }
 
+  // This handler operates when the goal is completed
   const doneHandler = () => {
     setIsEditable(false);
     updateData(undefined, props.id, true)
   }
 
+  // This handler operates when the goal is edited
   const editableHandler = (e) => {
     if (isEditable) {
       const data = e.target.value;
@@ -39,6 +44,7 @@ const GoalItem = props => {
     }
   }
 
+  // Toggles whether the goal is completed or not
   const inputElement1 = (<input id={props.id} className={classes['inputItem1']} onBlur={editableHandler} onChange={inputHandler} value={inputValue}/>)
   const inputElement2 = (<input id={props.id} className={classes['inputItem2']} onBlur={editableHandler} onChange={inputHandler} value={inputValue} readOnly={!isEditable} />)
   return (

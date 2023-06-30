@@ -6,6 +6,7 @@ const Form = (props) => {
     const [loginVisible, setLoginVisible] = useState(true)
     const [signupVisible, setSignupVisible] = useState(false)
 
+    // Toggles between login and sigup upon what is the current state
     const showLogin = () => {
         setLoginVisible(true)
         setSignupVisible(false)

@@ -6,6 +6,10 @@ import { useState } from 'react'
 const Login = props => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
+    /**  
+    Prevets the form to reload page and then loggs in the user to his/her account.And also sets the userId to to local storage for app.js reference.It then closes the the form by calling OnClose().If clicked register the it switches to signup page. 
+    */
     const submitHandler = async (e) => {
         e.preventDefault()
         try {

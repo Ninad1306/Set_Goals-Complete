@@ -7,6 +7,10 @@ const Signup = props => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
+    /**  
+    Prevets the form to reload page and then register user in their account.And also sets the userId to to local storage for app.js reference.It then closes the the form by calling OnClose().If clicked login the it switches to login page. 
+    */
     const submitHandler = async (e) => {
         e.preventDefault()
         try {
