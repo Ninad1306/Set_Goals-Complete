@@ -15,6 +15,7 @@ const Login = props => {
             })
             if(response.status === 200){
                 props.onAdd(response.data._id)
+                localStorage.setItem("userId",response.data._id)
                 props.onClose()
             }
             else{
@@ -56,7 +57,7 @@ const Login = props => {
                     <div className='submitbtn'><button className='formbtn' type='submit'>Submit</button></div>
                 </form>
 
-                <p>Not registered? <a onClick={signupHandler} className='anchorSignup'>Signup</a></p>
+                <p>Not registered? <a onClick={signupHandler} className='anchorSignup'>register</a></p>
             </div>
         </Modal>
     )

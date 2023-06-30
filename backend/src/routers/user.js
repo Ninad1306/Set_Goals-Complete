@@ -16,6 +16,9 @@ router.post('/users', async (req, res) => {
 router.post('/users/login', async (req, res) => {
     try {
         const user = await User.findByCredentials(req.body.email, req.body.password)
+        if(user.status === true){
+            return res.status(401).send()
+        }
         user.status = true
         await user.save()
         res.send(user)
@@ -27,10 +30,10 @@ router.post('/users/login', async (req, res) => {
 router.get('/users', async (req, res) => {
     try {
         const count = await User.countDocuments({ status: true })
-        if(count > 0){
+        if(count){
             return res.send("data")
         }
-        res.send("no data")
+        res.send("no-data")
     }
     catch (e) {
         res.status(400).send()

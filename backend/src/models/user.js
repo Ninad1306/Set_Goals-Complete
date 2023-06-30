@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs')
 
-const userSchema = mongoose.Schema({
+const userSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -20,8 +20,10 @@ const userSchema = mongoose.Schema({
     },
     status: {
         type: Boolean,
-        required: true
+        default: true
     },
+}, {
+    timestamps: true
 })
 
 userSchema.methods.toJSON = function () {
@@ -33,9 +35,9 @@ userSchema.methods.toJSON = function () {
     return userObject
 }
 
-userSchema.pre('save', async function(next){
+userSchema.pre('save', async function (next) {
     const user = this
-    if(user.isModified('password')) {
+    if (user.isModified('password')) {
         user.password = await bcrypt.hash(user.password, 8)
     }
 
@@ -46,8 +48,8 @@ userSchema.statics.findByCredentials = async (email, password) => {
     const user = await User.findOne({ email })
     const isMatch = bcrypt.compare(password, user.password)
 
-    if(!user || !isMatch){
-        throw new Error('Unable to login.') 
+    if (!user || !isMatch) {
+        throw new Error('Unable to login.')
     }
 
     return user

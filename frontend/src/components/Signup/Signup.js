@@ -20,6 +20,7 @@ const Signup = props => {
             // console.log(response.data)
             if(response.status === 201){
                 props.onAdd(response.data._id)
+                localStorage.setItem("userId",response.data._id)
                 props.onClose()
             }
             else{
@@ -38,7 +39,7 @@ const Signup = props => {
         <Modal >
             <div className='container'>
                 <div className='formheading'>
-                    <h2>Signup</h2>
+                    <h2>Register</h2>
                 </div>
                 <form onSubmit={submitHandler} method='POST' className='signupForm'>
                     <div className='inp1'>

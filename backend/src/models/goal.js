@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const goalSchema = mongoose.Schema({
+const goalSchema = new mongoose.Schema({
     desc: {
         type: String,
         required: true,
@@ -11,9 +11,12 @@ const goalSchema = mongoose.Schema({
         default: false
     },
     userId: {
-        type: mongoose.Schema.Types.ObjectId,
+        // type: mongoose.Schema.Types.ObjectId,
+        type: String,
         required: true,
     }
+}, {
+    timestamps: true
 })
 
 const Goal = mongoose.model('Goal', goalSchema)

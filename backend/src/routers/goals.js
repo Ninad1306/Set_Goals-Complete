@@ -13,9 +13,9 @@ router.post('/goals', async (req, res) => {
     }
 })
 
-// router.get('/goals/:userEmail', async (req, res) => {
+// router.get('/goals/:id', async (req, res) => {
 //     try {
-//         const goals = await Goal.find({userEmail: req.params.userEmail})
+//         const goals = await Goal.find({ userId: req.params.id })       
 //         res.send(goals)
 //     }
 //     catch (e) {
@@ -24,13 +24,28 @@ router.post('/goals', async (req, res) => {
 // })
 
 router.get('/goals/:id', async (req, res) => {
+    const match = {}
+    const sort = {}
+    match.userId = req.params.id
+    if (req.query.completed) {
+        match.completed = req.query.completed === 'true'
+    }
+    if (req.query.sortBy) {
+        const parts = req.query.sortBy.split(':')
+        sort[parts[0]] = parts[1] === 'desc' ? -1 : 1
+    }
     try {
-        const goals = await Goal.find({userId: req.params.id})
+        const goals = await Goal.aggregate([
+            { $match: match},
+            // {$limit: parseInt(req.query.limit)},
+            { $sort: sort }
+        ])     
         res.send(goals)
     }
     catch (e) {
         res.status(400).send()
     }
+
 })
 
 router.patch('/goals/:id', async (req, res) => {
@@ -59,7 +74,7 @@ router.delete('/goals/:id', async (req, res) => {
     try {
         const goal = await Goal.findByIdAndDelete(req.params.id)
 
-        if(!goal){
+        if (!goal) {
             res.status(404).send()
         }
         res.send(goal)

@@ -8,7 +8,7 @@ const Navbar = (props) => {
         if (response.status === 200) {
             props.onLogout()
         }
-        else{
+        else {
             alert("Error:" + response.status)
         }
     }
@@ -16,6 +16,13 @@ const Navbar = (props) => {
     const logoutHandler = () => {
         updateStatus()
     }
+    // useEffect(() => {
+    //     window.addEventListener('beforeunload', (e) => {
+    //         e.preventDefault()
+    //         e.returnValue = ''
+    //         updateStatus()
+    //     })
+    // })
 
     return (
         <div className="navbar">

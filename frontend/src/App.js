@@ -8,16 +8,40 @@ import Navbar from './components/Navbar/Navbar'
 
 const App = () => {
 
+  const initial = async () => {
+    const res = localStorage.getItem("userId")
+    if (res !== null) {
+      localStorage.setItem("formVisibility", JSON.stringify(false))
+    }
+    else{
+      localStorage.setItem("formVisibility", JSON.stringify(true))
+    }
+  }
+
   const [courseGoals, setCourseGoals] = useState([])
-  const [isVisible, setIsVisible] = useState(true)
-  const [userId, setUserId] = useState('')
+  const [isVisible, setIsVisible] = useState(JSON.parse(localStorage.getItem("formVisibility")))
+  const [userId, setUserId] = useState(localStorage.getItem("userId"))
+
+  useEffect(() => {
+    if (!isVisible) {
+      getData()
+    }
+  }, [isVisible])
+
+  useEffect(() => {
+    getData()
+  }, [courseGoals])
+
+  useEffect(() => {
+    initial()
+  }, [])
 
   const addGoalHandler = async (desc) => {
     await Axios.post("http://localhost:5000/goals", {
       desc,
       userId
     });
-    getData()
+    // getData()
   }
 
   const changeUserHandler = (id) => {
@@ -26,42 +50,35 @@ const App = () => {
 
   const deleteItemHandler = async (goalId) => {
     await Axios.delete("http://localhost:5000/goals/" + goalId);
-    getData()
+    // getData()
   };
 
   const getData = async () => {
-    const response = await Axios.get("http://localhost:5000/goals/" + userId);
+    const response = await Axios.get("http://localhost:5000/goals/" + userId + "?sortBy=completed");
     setCourseGoals(response.data)
-    // console.log(response.data)
-  }
-
-
-  useEffect(() => {
-    if (!isVisible) {
-      getData()
-    }
-  }, [isVisible]);
-
-
-  let content = (<p style={{ textAlign: 'center' }}>No goals found. Maybe add one?</p>);
-
-  if (courseGoals.length > 0) {
-    content = (<GoalList items={courseGoals} onDeleteItem={deleteItemHandler} />);
   }
 
   const hideFormHandler = () => {
-    setIsVisible(false)
+    localStorage.setItem("formVisibility", JSON.stringify(false))
+    setIsVisible(JSON.parse(localStorage.getItem("formVisibility")))
   }
 
   const showFormHandler = () => {
-    setIsVisible(true)
+    localStorage.setItem("formVisibility", JSON.stringify(true))
+    setIsVisible(JSON.parse(localStorage.getItem("formVisibility")))
+    localStorage.removeItem("userId")
     setCourseGoals('')
+  }
+
+  let content = (<p style={{ textAlign: 'center' }}>No goals found. Maybe add one?</p>);
+  if (courseGoals.length > 0) {
+    content = (<GoalList items={courseGoals} onDeleteItem={deleteItemHandler} />);
   }
 
   return (
     <div>
       {isVisible && <Form onClose={hideFormHandler} onAdd={changeUserHandler} />}
-      <Navbar changeUserId={userId} onLogout={showFormHandler} />
+      <Navbar changeUserId={userId}  onLogout={showFormHandler} />
       <section id="goal-form">
         <Input onAddGoal={addGoalHandler} />
       </section>

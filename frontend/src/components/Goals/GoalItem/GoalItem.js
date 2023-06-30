@@ -39,7 +39,7 @@ const GoalItem = props => {
     }
   }
 
-  const inputElement1 = (<input id={props.id} className={classes['inputItem1']} onBlur={editableHandler} onChange={inputHandler} value={inputValue} readOnly={!isEditable} />)
+  const inputElement1 = (<input id={props.id} className={classes['inputItem1']} onBlur={editableHandler} onChange={inputHandler} value={inputValue}/>)
   const inputElement2 = (<input id={props.id} className={classes['inputItem2']} onBlur={editableHandler} onChange={inputHandler} value={inputValue} readOnly={!isEditable} />)
   return (
     <li className={classes['goal-item']}>
