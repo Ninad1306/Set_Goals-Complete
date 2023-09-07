@@ -10,11 +10,11 @@ const App = () => {
   // Runs first to check if form should be shown or not to avoid wrong 
   // reload during page refresh.
   const initial = async () => {
-    const res = localStorage.getItem("userId")
+    const res = localStorage.getItem("token")
     if (res !== null) {
       localStorage.setItem("formVisibility", JSON.stringify(false))
     }
-    else{
+    else {
       localStorage.setItem("formVisibility", JSON.stringify(true))
     }
   }
@@ -22,19 +22,32 @@ const App = () => {
   // State variables
   const [courseGoals, setCourseGoals] = useState([])
   const [isVisible, setIsVisible] = useState(JSON.parse(localStorage.getItem("formVisibility")))
-  const [userId, setUserId] = useState(localStorage.getItem("userId"))
+  const [token, setToken] = useState(localStorage.getItem("token"))
 
   // Fetches data only if form is not visible
-  useEffect(() => {
+  // useEffect(() => {
+  //   if (!isVisible) {
+  //     getData()
+  //   }
+  // }, [isVisible])
+
+  // Data fetch function
+  const getData = async () => {
+    // const response = await Axios.get("https://task-manager-api-e0aa.onrender.com/goals/" + token + "?sortBy=completed");
     if (!isVisible) {
-      getData()
+      const response = await Axios.get("https://task-manager-api-e0aa.onrender.com/tasks", {
+        headers: {
+          'Authorization': 'Bearer ' + token
+        }
+      })
+      setCourseGoals(response.data)
     }
-  }, [isVisible])
+  }
 
   // Fetches data when the data changes
   useEffect(() => {
     getData()
-  }, [courseGoals])
+  }, [courseGoals, isVisible,getData])
 
   // Runs when page reloads
   useEffect(() => {
@@ -43,29 +56,29 @@ const App = () => {
 
   // Adds the goal to database
   const addGoalHandler = async (desc) => {
-    await Axios.post("http://localhost:5000/goals", {
-      desc,
-      userId
+    await Axios.post("https://task-manager-api-e0aa.onrender.com/tasks",
+      { desc }, {
+      headers: {
+        'Authorization': 'Bearer ' + token
+      }
     });
     // getData()
   }
 
-    // Updates the userid during register or login
-  const changeUserHandler = (id) => {
-    setUserId(id)
+  // Updates the token during register or login
+  const changeUserHandler = (tkn) => {
+    setToken(tkn)
   }
 
   // Deletes the data from database
-  const deleteItemHandler = async (goalId) => {
-    await Axios.delete("http://localhost:5000/goals/" + goalId);
+  const deleteItemHandler = async (taskId) => {
+    await Axios.delete("https://task-manager-api-e0aa.onrender.com/tasks/" + taskId, {
+      headers: {
+        'Authorization': 'Bearer ' + token
+      }
+    });
     // getData()
   };
-
-  // Data fetch function
-  const getData = async () => {
-    const response = await Axios.get("http://localhost:5000/goals/" + userId + "?sortBy=completed");
-    setCourseGoals(response.data)
-  }
 
   // Hides the form
   const hideFormHandler = () => {
@@ -77,20 +90,20 @@ const App = () => {
   const showFormHandler = () => {
     localStorage.setItem("formVisibility", JSON.stringify(true))
     setIsVisible(JSON.parse(localStorage.getItem("formVisibility")))
-    localStorage.removeItem("userId")
+    localStorage.removeItem("token")
     setCourseGoals('')
   }
 
   // GoalList container created.
   let content = (<p style={{ textAlign: 'center' }}>No goals found. Maybe add one?</p>);
   if (courseGoals.length > 0) {
-    content = (<GoalList items={courseGoals} onDeleteItem={deleteItemHandler} />);
+    content = (<GoalList items={courseGoals} onDeleteItem={deleteItemHandler} token={token} />);
   }
 
   return (
     <div>
       {isVisible && <Form onClose={hideFormHandler} onAdd={changeUserHandler} />}
-      <Navbar changeUserId={userId}  onLogout={showFormHandler} />
+      <Navbar changeToken={token} onLogout={showFormHandler} />
       <section id="goal-form">
         <Input onAddGoal={addGoalHandler} />
       </section>

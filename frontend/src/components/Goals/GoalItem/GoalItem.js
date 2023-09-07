@@ -8,9 +8,13 @@ const GoalItem = props => {
 
   // Updates the enterd goal in the database
   const updateData = async (desc = inputValue, id, status = false) => {
-    await Axios.patch("http://localhost:5000/goals/" + id, {
+    await Axios.patch("https://task-manager-api-e0aa.onrender.com/tasks/" + id, {
       desc,
-      completed: status
+      completed: status,
+    }, {
+      headers: {
+        'Authorization': 'Bearer ' + props.token
+      }
     })
   }
 

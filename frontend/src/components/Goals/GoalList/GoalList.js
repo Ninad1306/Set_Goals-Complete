@@ -14,6 +14,7 @@ const GoalList = props => {
           onDelete={props.onDeleteItem}
           text={goal.desc}
           completed={goal.completed}
+          token={props.token}
         />
       ))}
     </ul>

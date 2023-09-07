@@ -14,17 +14,24 @@ const Signup = props => {
     const submitHandler = async (e) => {
         e.preventDefault()
         try {
-            const response = await Axios.post("http://localhost:5000/users",{
+            // const response = await Axios.post("http://localhost:5000/users",{
+            //     name,
+            //     email,
+            //     password,
+            //     status: true
+            // })
+
+            const response = await Axios.post('https://task-manager-api-e0aa.onrender.com/users',
+            {
                 name,
                 email,
                 password,
-                status: true
             })
 
             // console.log(response.data)
             if(response.status === 201){
-                props.onAdd(response.data._id)
-                localStorage.setItem("userId",response.data._id)
+                props.onAdd(response.data.token)
+                localStorage.setItem("token",response.data.token)
                 props.onClose()
             }
             else{

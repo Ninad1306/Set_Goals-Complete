@@ -13,13 +13,13 @@ const Login = props => {
     const submitHandler = async (e) => {
         e.preventDefault()
         try {
-            const response = await Axios.post("http://localhost:5000/users/login",{
+            const response = await Axios.post("https://task-manager-api-e0aa.onrender.com/users/login",{
                 email,
-                password
+                password,
             })
             if(response.status === 200){
-                props.onAdd(response.data._id)
-                localStorage.setItem("userId",response.data._id)
+                props.onAdd(response.data.token)
+                localStorage.setItem("token",response.data.token)
                 props.onClose()
             }
             else{
